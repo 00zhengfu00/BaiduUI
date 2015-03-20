@@ -1,0 +1,138 @@
+<!--
+  Copyright 2014 Soichiro Kashima
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <FrameLayout
+        android:id="@+id/pager_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#906090" >
+
+        <View
+            android:id="@+id/header_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/sliding_tabs"
+            android:layout_alignTop="@+id/toolbar_translationY"
+            android:background="@drawable/header_bg" />
+
+        <TextView
+            android:id="@+id/toolbar_translationY"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/translationY"
+            android:minHeight="48dp" />
+
+        <RelativeLayout
+            android:id="@+id/view_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" >
+
+            <View
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#9080a0" />
+
+            <ImageView
+                android:id="@+id/title_user"
+                android:layout_width="40dp"
+                android:layout_height="48dp"
+                android:padding="6dp"
+                android:src="@drawable/main_page_person_center_normal" />
+
+            <ImageView
+                android:id="@+id/title_down"
+                android:layout_width="36dp"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:padding="4dp"
+                android:src="@drawable/main_page_download_center_normal_normal" />
+
+            <ImageView
+                android:id="@+id/title_wifi"
+                android:layout_width="36dp"
+                android:layout_height="48dp"
+                android:layout_toLeftOf="@+id/title_down"
+                android:padding="4dp"
+                android:src="@drawable/main_page_wifi_center_normal" />
+        </RelativeLayout>
+        
+        <RelativeLayout
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/toolbar_translationY"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/box_search"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+             >
+
+            <ImageView 
+                android:id="@+id/iv_search"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/main_titlebar_search_normal"
+                />
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_toRightOf="@+id/iv_search"
+                android:layout_toLeftOf="@+id/iv_code"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textSize="16sp"
+                android:text="搜索" />
+            
+            <ImageView 
+                android:id="@+id/iv_code"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_dimensional_code_icon_normal"
+                />
+        </RelativeLayout>
+
+        <com.google.samples.apps.iosched.ui.widget.SlidingTabLayout
+            android:id="@+id/sliding_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_height"
+            android:layout_below="@+id/search"
+            android:background="@color/primary" />
+    </RelativeLayout>
+
+</com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout>
