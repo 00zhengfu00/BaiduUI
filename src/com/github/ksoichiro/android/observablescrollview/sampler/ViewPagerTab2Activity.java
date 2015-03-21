@@ -48,7 +48,7 @@ import com.nineoldandroids.view.ViewHelper;
  * https://github.com/google/iosched
  */
 public class ViewPagerTab2Activity extends BaseActivity implements ObservableScrollViewCallbacks {
-	private static final boolean ADJUSTTOOLBAR_ENABLE = false;
+	private static final boolean ADJUSTTOOLBAR_ENABLE = true;
 	private static final boolean SCROLLINGUP_NOW = false;
 	
 	private View mToolbarView;
@@ -170,22 +170,7 @@ public class ViewPagerTab2Activity extends BaseActivity implements ObservableScr
 					mInterceptionLayout.requestLayout();
 				}
 				
-				RelativeLayout.LayoutParams params = (LayoutParams) search.getLayoutParams();
-				int left = dipToPx(10);
-				int right = dipToPx(10);
-				float percent = 0;
-				if (translationY < startAmi) {
-					percent = (startAmi - translationY) / tabHeight / 2;
-				} 
-				ViewHelper.setAlpha(toolbar, percent);
-				
-				int abSize = getTranslationY();
-				percent = -translationY / abSize;
-				left += percent * dipToPx(30);
-				right += percent * dipToPx(30);
-
-				params.setMargins(left, params.topMargin, right, params.bottomMargin);
-				search.setLayoutParams(params);
+				fixView(translationY);
 			}
 		}
 
@@ -196,6 +181,25 @@ public class ViewPagerTab2Activity extends BaseActivity implements ObservableScr
 		}
 	};
 
+	private void fixView(float translationY){
+		RelativeLayout.LayoutParams params = (LayoutParams) search.getLayoutParams();
+		int left = dipToPx(10);
+		int right = dipToPx(10);
+		float percent = 0;
+		if (translationY < startAmi) {
+			percent = (startAmi - translationY) / tabHeight / 2;
+		} 
+		ViewHelper.setAlpha(toolbar, percent);
+		
+		int abSize = getTranslationY();
+		percent = -translationY / abSize;
+		left += percent * dipToPx(30);
+		right += percent * dipToPx(30);
+
+		params.setMargins(left, params.topMargin, right, params.bottomMargin);
+		search.setLayoutParams(params);
+	}
+	
 	public int dipToPx(int dipValue){
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, getResources().getDisplayMetrics());
 	}
@@ -222,14 +226,12 @@ public class ViewPagerTab2Activity extends BaseActivity implements ObservableScr
 		}
 		int scrollY = scrollable.getCurrentScrollY();
 		if (scrollState == ScrollState.DOWN) {
-			if(!toolbarIsShown() && !toolbarIsHidden())
-				showToolbar();
+			showToolbar();
 		} else if (scrollState == ScrollState.UP) {
 			if (toolbarHeight <= scrollY) {
 				hideToolbar();
 			} else{
-				if(!toolbarIsShown() && !toolbarIsHidden())
-					showToolbar();
+				showToolbar();
 			}
 		} else if (!toolbarIsShown() && !toolbarIsHidden()) {
 			// Toolbar is moving but doesn't know which to move:
@@ -251,7 +253,8 @@ public class ViewPagerTab2Activity extends BaseActivity implements ObservableScr
 	}
 
 	private void showToolbar() {
-		animateToolbar(0);
+		if(!toolbarIsShown() && !toolbarIsHidden())
+			animateToolbar(0);
 	}
 
 	private void hideToolbar() {
@@ -268,11 +271,8 @@ public class ViewPagerTab2Activity extends BaseActivity implements ObservableScr
 					float translationY = (Float) animation.getAnimatedValue();
 					ViewHelper.setTranslationY(mInterceptionLayout, translationY);
 					ViewHelper.setTranslationY(view_toolbar, -translationY);
-					float percent = 0;
-					if (translationY < startAmi) {
-						percent = (startAmi - translationY) / tabHeight / 2;
-					} 
-					ViewHelper.setAlpha(toolbar, percent);
+
+					fixView(translationY);
 				}
 			});
 			animator.start();
