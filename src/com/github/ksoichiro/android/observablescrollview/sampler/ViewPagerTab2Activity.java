@@ -222,12 +222,14 @@ public class ViewPagerTab2Activity extends BaseActivity implements ObservableScr
 		}
 		int scrollY = scrollable.getCurrentScrollY();
 		if (scrollState == ScrollState.DOWN) {
-			showToolbar();
+			if(!toolbarIsShown() && !toolbarIsHidden())
+				showToolbar();
 		} else if (scrollState == ScrollState.UP) {
 			if (toolbarHeight <= scrollY) {
 				hideToolbar();
-			} else {
-				showToolbar();
+			} else{
+				if(!toolbarIsShown() && !toolbarIsHidden())
+					showToolbar();
 			}
 		} else if (!toolbarIsShown() && !toolbarIsHidden()) {
 			// Toolbar is moving but doesn't know which to move:
@@ -265,11 +267,12 @@ public class ViewPagerTab2Activity extends BaseActivity implements ObservableScr
 				public void onAnimationUpdate(ValueAnimator animation) {
 					float translationY = (Float) animation.getAnimatedValue();
 					ViewHelper.setTranslationY(mInterceptionLayout, translationY);
-					if (translationY < 0) {
-						FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mInterceptionLayout.getLayoutParams();
-						lp.height = (int) (-translationY + getScreenHeight());
-						mInterceptionLayout.requestLayout();
-					}
+					ViewHelper.setTranslationY(view_toolbar, -translationY);
+					float percent = 0;
+					if (translationY < startAmi) {
+						percent = (startAmi - translationY) / tabHeight / 2;
+					} 
+					ViewHelper.setAlpha(toolbar, percent);
 				}
 			});
 			animator.start();
